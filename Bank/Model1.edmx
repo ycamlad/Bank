@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BankModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="ID_Admin" />
+          </Key>
+          <Property Name="ID_Admin" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Pass_Admin" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Argent_Comptant">
+          <Key>
+            <PropertyRef Name="IDComptant" />
+          </Key>
+          <Property Name="IDComptant" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Comptant" Type="money" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Code_Client" />
+          </Key>
+          <Property Name="Code_Client" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Nom" Type="nchar" MaxLength="20" />
+          <Property Name="Prenom" Type="nchar" MaxLength="20" />
+          <Property Name="Telephone" Type="nchar" MaxLength="15" />
+          <Property Name="Courriel" Type="nchar" MaxLength="40" />
+          <Property Name="Nip" Type="nchar" MaxLength="4" />
+          <Property Name="Acces" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Compte_Bancaire">
+          <Key>
+            <PropertyRef Name="No_Compte" />
+          </Key>
+          <Property Name="No_Compte" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="CClient" Type="nchar" MaxLength="10" />
+          <Property Name="Type_de_Compte" Type="nchar" MaxLength="15" />
+          <Property Name="Montant" Type="money" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="Numero_de_transaction" />
+          </Key>
+          <Property Name="CCLIENT" Type="nchar" MaxLength="10" />
+          <Property Name="Numero_de_transaction" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Depot" Type="money" />
+          <Property Name="Retrait" Type="money" />
+          <Property Name="No_Compte" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK_Compte_Bancaire_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="Compte_Bancaire" Type="Self.Compte_Bancaire" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Code_Client" />
+            </Principal>
+            <Dependent Role="Compte_Bancaire">
+              <PropertyRef Name="CClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Code_Client" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="CCLIENT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_Compte_Bancaire">
+          <End Role="Compte_Bancaire" Type="Self.Compte_Bancaire" Multiplicity="0..1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compte_Bancaire">
+              <PropertyRef Name="No_Compte" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="No_Compte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BankModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Argent_Comptant" EntityType="Self.Argent_Comptant" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Compte_Bancaire" EntityType="Self.Compte_Bancaire" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transaction" EntityType="Self.Transaction" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Compte_Bancaire_Client" Association="Self.FK_Compte_Bancaire_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Compte_Bancaire" EntitySet="Compte_Bancaire" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_Client" Association="Self.FK_Transaction_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_Compte_Bancaire" Association="Self.FK_Transaction_Compte_Bancaire">
+            <End Role="Compte_Bancaire" EntitySet="Compte_Bancaire" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BankModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="ID_Admin" />
+          </Key>
+          <Property Name="ID_Admin" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Pass_Admin" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Argent_Comptant">
+          <Key>
+            <PropertyRef Name="IDComptant" />
+          </Key>
+          <Property Name="IDComptant" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Comptant" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Code_Client" />
+          </Key>
+          <Property Name="Code_Client" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Nom" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="Prenom" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="Telephone" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+          <Property Name="Courriel" Type="String" MaxLength="40" FixedLength="true" Unicode="true" />
+          <Property Name="Nip" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Name="Acces" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Compte_Bancaire" Relationship="Self.FK_Compte_Bancaire_Client" FromRole="Client" ToRole="Compte_Bancaire" />
+          <NavigationProperty Name="Transactions" Relationship="Self.FK_Transaction_Client" FromRole="Client" ToRole="Transaction" />
+        </EntityType>
+        <EntityType Name="Compte_Bancaire">
+          <Key>
+            <PropertyRef Name="No_Compte" />
+          </Key>
+          <Property Name="No_Compte" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="CClient" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Type_de_Compte" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+          <Property Name="Montant" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Compte_Bancaire_Client" FromRole="Compte_Bancaire" ToRole="Client" />
+          <NavigationProperty Name="Transactions" Relationship="Self.FK_Transaction_Compte_Bancaire" FromRole="Compte_Bancaire" ToRole="Transaction" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="Numero_de_transaction" />
+          </Key>
+          <Property Name="CCLIENT" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Numero_de_transaction" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Depot" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Retrait" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="No_Compte" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Transaction_Client" FromRole="Transaction" ToRole="Client" />
+          <NavigationProperty Name="Compte_Bancaire" Relationship="Self.FK_Transaction_Compte_Bancaire" FromRole="Transaction" ToRole="Compte_Bancaire" />
+        </EntityType>
+        <Association Name="FK_Compte_Bancaire_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="Compte_Bancaire" Type="Self.Compte_Bancaire" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Code_Client" />
+            </Principal>
+            <Dependent Role="Compte_Bancaire">
+              <PropertyRef Name="CClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Code_Client" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="CCLIENT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_Compte_Bancaire">
+          <End Role="Compte_Bancaire" Type="Self.Compte_Bancaire" Multiplicity="0..1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compte_Bancaire">
+              <PropertyRef Name="No_Compte" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="No_Compte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BankEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admins" EntityType="Self.Admin" />
+          <EntitySet Name="Argent_Comptant" EntityType="Self.Argent_Comptant" />
+          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="Compte_Bancaire" EntityType="Self.Compte_Bancaire" />
+          <EntitySet Name="Transactions" EntityType="Self.Transaction" />
+          <AssociationSet Name="FK_Compte_Bancaire_Client" Association="Self.FK_Compte_Bancaire_Client">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="Compte_Bancaire" EntitySet="Compte_Bancaire" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_Client" Association="Self.FK_Transaction_Client">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="Transaction" EntitySet="Transactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_Compte_Bancaire" Association="Self.FK_Transaction_Compte_Bancaire">
+            <End Role="Compte_Bancaire" EntitySet="Compte_Bancaire" />
+            <End Role="Transaction" EntitySet="Transactions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BankModelStoreContainer" CdmEntityContainer="BankEntities2">
+          <EntitySetMapping Name="Admins">
+            <EntityTypeMapping TypeName="BankModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="ID_Admin" ColumnName="ID_Admin" />
+                <ScalarProperty Name="Pass_Admin" ColumnName="Pass_Admin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Argent_Comptant">
+            <EntityTypeMapping TypeName="BankModel.Argent_Comptant">
+              <MappingFragment StoreEntitySet="Argent_Comptant">
+                <ScalarProperty Name="IDComptant" ColumnName="IDComptant" />
+                <ScalarProperty Name="Comptant" ColumnName="Comptant" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="BankModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="Code_Client" ColumnName="Code_Client" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Prenom" ColumnName="Prenom" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Courriel" ColumnName="Courriel" />
+                <ScalarProperty Name="Nip" ColumnName="Nip" />
+                <ScalarProperty Name="Acces" ColumnName="Acces" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Compte_Bancaire">
+            <EntityTypeMapping TypeName="BankModel.Compte_Bancaire">
+              <MappingFragment StoreEntitySet="Compte_Bancaire">
+                <ScalarProperty Name="No_Compte" ColumnName="No_Compte" />
+                <ScalarProperty Name="CClient" ColumnName="CClient" />
+                <ScalarProperty Name="Type_de_Compte" ColumnName="Type_de_Compte" />
+                <ScalarProperty Name="Montant" ColumnName="Montant" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transactions">
+            <EntityTypeMapping TypeName="BankModel.Transaction">
+              <MappingFragment StoreEntitySet="Transaction">
+                <ScalarProperty Name="CCLIENT" ColumnName="CCLIENT" />
+                <ScalarProperty Name="Numero_de_transaction" ColumnName="Numero_de_transaction" />
+                <ScalarProperty Name="Depot" ColumnName="Depot" />
+                <ScalarProperty Name="Retrait" ColumnName="Retrait" />
+                <ScalarProperty Name="No_Compte" ColumnName="No_Compte" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

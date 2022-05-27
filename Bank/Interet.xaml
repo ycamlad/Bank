@@ -1,0 +1,22 @@
+﻿<Window x:Class="Bank.Interet"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bank"
+        mc:Ignorable="d"
+        Title="Interet" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <DataGrid x:Name="dtgInteret" HorizontalAlignment="Left" Height="207" Margin="115,92,0,0" VerticalAlignment="Top" Width="551" ItemsSource="{Binding}"   IsSynchronizedWithCurrentItem="True" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Code client" Binding="{Binding CClient}"/>
+                <DataGridTextColumn Header="Numero de compte" Binding="{Binding No_Compte}"/>
+                <DataGridTextColumn Header="Type de compte" Binding="{Binding Type_de_Compte}"/>
+                <DataGridTextColumn Header="Montant" Binding="{Binding Montant}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label Content="Interet" HorizontalAlignment="Left" Margin="366,42,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold"/>
+        <Button x:Name="btnPayer" Content="Payer" HorizontalAlignment="Left" Margin="352,332,0,0" VerticalAlignment="Top" Width="75" Height="39" Click="btnPayer_Click"/>
+
+    </Grid>
+</Window>

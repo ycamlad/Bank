@@ -1,0 +1,21 @@
+﻿<Window x:Class="Bank.ajouter_comptant"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bank"
+        mc:Ignorable="d"
+        Title="ajouter comptant" Height="450" Width="412.705" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Label Content="Argent comptant:" HorizontalAlignment="Left" Margin="83,86,0,0" VerticalAlignment="Top"/>
+        <Label Content="Ajouter Argent:" HorizontalAlignment="Left" Margin="83,151,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblComptant" Content="{Binding Comptant}" HorizontalAlignment="Left" Margin="221,86,0,0" VerticalAlignment="Top" >
+            <Label.DataContext>
+                <local:Argent_Comptant/>
+            </Label.DataContext>
+        </Label>
+        <TextBox x:Name="txtComptant" HorizontalAlignment="Left" Height="23" Margin="198,154,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="71"/>
+        <Button x:Name="btnAjouter" Content="Ajouter" HorizontalAlignment="Left" Margin="162,225,0,0" VerticalAlignment="Top" Width="75" Height="34" Click="btnAjouter_Click"/>
+
+    </Grid>
+</Window>

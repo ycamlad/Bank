@@ -1,0 +1,22 @@
+﻿<Window x:Class="Bank.Marge_de_credit"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bank"
+        mc:Ignorable="d"
+        Title="Marge de credit" Height="450" Width="800">
+    <Grid>
+        <DataGrid x:Name="dtgAugmenter" HorizontalAlignment="Left" Height="209" Margin="151,89,0,0" VerticalAlignment="Top" Width="471" ItemsSource="{Binding}"   IsSynchronizedWithCurrentItem="True" AutoGenerateColumns="False" IsReadOnly="True" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Code client" Binding="{Binding CClient}"/>
+                <DataGridTextColumn Header="Numero de compte" Binding="{Binding No_Compte}"/>
+                <DataGridTextColumn Header="Type de compte" Binding="{Binding Type_de_Compte}"/>
+                <DataGridTextColumn Header="Montant" Binding="{Binding Montant}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="btnAugmenter" Content="Augmenter" HorizontalAlignment="Left" Margin="345,323,0,0" VerticalAlignment="Top" Width="75" Height="45" Click="btnAugmenter_Click"/>
+        <Label Content="Marge de credit" HorizontalAlignment="Left" Margin="296,36,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold"/>
+
+    </Grid>
+</Window>

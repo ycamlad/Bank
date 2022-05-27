@@ -1,0 +1,25 @@
+﻿<Window x:Class="Bank.Creer_Compte"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bank"
+        mc:Ignorable="d"
+        Title="Creer Compte" Height="447" Width="696" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <DataGrid x:Name="dtgafficher" HorizontalAlignment="Left" Height="189" Margin="49,177,0,0" VerticalAlignment="Top" Width="586"  ItemsSource="{Binding}"  DisplayMemberPath="Code_Client" IsReadOnly="True"/>
+        <Label Content="No compte:" HorizontalAlignment="Left" Margin="26,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.974,0.077"/>
+        <Label Content="Code Client:" HorizontalAlignment="Left" Margin="26,104,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.974,0.077"/>
+        <TextBox x:Name="txtnoCompte" HorizontalAlignment="Left" Height="23" Margin="109,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtCode" HorizontalAlignment="Left" Height="23" Margin="112,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btnCreer" Content="Creer" HorizontalAlignment="Left" Margin="388,104,0,0" VerticalAlignment="Top" Width="120" Click="btnCreer_Click"/>
+        <ComboBox x:Name="cboCompte" HorizontalAlignment="Left" Margin="388,32,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem Content="Cheque"/>
+            <ComboBoxItem Content="Epargne"/>
+            <ComboBoxItem Content="Hypothecaire"/>
+            <ComboBoxItem Content="Marge de credit"/>
+        </ComboBox>
+        <Label Content="Type de compte:" HorizontalAlignment="Left" Margin="285,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.974,0.077"/>
+
+    </Grid>
+</Window>
