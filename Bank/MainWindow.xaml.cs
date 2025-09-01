@@ -36,12 +36,12 @@ namespace Bank
             var code = txtCodeClient.Text;
             var nip = txtNip.Password;
             Application.Current.Properties["code"] = code;
-            // requete pour savoir si le compte est debloquer 
+            // requête pour savoir si le statut du compte est normal 
             var verif = mybdd.Admins.FirstOrDefault(u => u.ID_Admin == code && u.Pass_Admin == nip);
             var Verification = mybdd.Clients.FirstOrDefault(u => u.Code_Client == code && u.Nip == nip && u.Acces == "Debloquer");
             var Verification2 = mybdd.Clients.FirstOrDefault(u => u.Code_Client == code);
 
-            // requete pour savoir si le compte qui se connecte est bloquer 
+            // requete pour savoir si le compte est suspendu 
             var Verification3 = mybdd.Clients.FirstOrDefault(u => u.Code_Client == code && u.Acces == "Bloquer");
             
             if (verif!=null)
@@ -52,7 +52,6 @@ namespace Bank
                 Hide();
                 txtCodeClient.Text = string.Empty;
                 txtNip.Password = string.Empty;
-
             }
                 //condition qui empeche un utilisateur bloquer de pouvoir acceder a son compte
             else  if (Verification3 != null) {
