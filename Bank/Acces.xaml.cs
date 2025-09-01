@@ -30,52 +30,44 @@ namespace Bank
 
         private void cboAcces_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Client client = cboAcces.SelectedItem as Client;
+            var client = cboAcces.SelectedItem as Client;
             dtgAcces.DataContext = (from p in mybdd.Clients
                                     select p).ToList();
         }
 
         private void btnBloquer_Click(object sender, RoutedEventArgs e)
         {
-            Client client2 = dtgAcces.SelectedItem as Client;
+            var client2 = dtgAcces.SelectedItem as Client;
             client2.Acces = "Bloquer";
             
             try
             {
-
                 mybdd.SaveChanges();
-                Client client = cboAcces.SelectedItem as Client;
+                var client = cboAcces.SelectedItem as Client;
                  dtgAcces.DataContext = (from p in mybdd.Clients
                                                                select p).ToList();
-
             }
             catch (Exception ex) {
 
                 MessageBox.Show(ex.Message);
-            
             }
         }
 
         private void btnDebloquer_Click(object sender, RoutedEventArgs e)
         {
-
-            Client client2 = dtgAcces.SelectedItem as Client;
+            var client2 = dtgAcces.SelectedItem as Client;
             client2.Acces = "Debloquer";
             
             try
             {
-
                 mybdd.SaveChanges();
-                Client client = cboAcces.SelectedItem as Client;
+                var client = cboAcces.SelectedItem as Client;
                 dtgAcces.DataContext = (from p in mybdd.Clients
                                         select p).ToList();
-
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.Message);
-
             }
         }
     }

@@ -19,37 +19,35 @@ namespace Bank
     /// </summary>
     public partial class Compte : Window
     {
-        BankEntities2 mybdd = new BankEntities2();
+        BankEntities2 _mybdd = new BankEntities2();
         decimal? comptant;
         string _compte;
 
         public Compte()
         {
             InitializeComponent();
-            string code = Application.Current.Properties["code"].ToString();
+            var code = Application.Current.Properties["code"].ToString();
 
-            cboCompte.DataContext = (from g in mybdd.Compte_Bancaire
-                                     join m in mybdd.Clients on g.CClient equals m.Code_Client
+            cboCompte.DataContext = (from g in _mybdd.Compte_Bancaire
+                                     join m in _mybdd.Clients on g.CClient equals m.Code_Client
                                      where m.Code_Client == code
                                      select m).ToList();
 
-            dtgAfficher.DataContext = (from g in mybdd.Compte_Bancaire
-                                       join m in mybdd.Clients on g.CClient equals m.Code_Client
+            dtgAfficher.DataContext = (from g in _mybdd.Compte_Bancaire
+                                       join m in _mybdd.Clients on g.CClient equals m.Code_Client
                                        where m.Code_Client == code
                                        select m).ToList();
             cboCompte.DisplayMemberPath = "Code_Client";
             dtgAfficher.DisplayMemberPath = "Montant";
-
-
 
         }
 
         // ComboBox cboCompte qui se synchronise avec la table client 
         private void cboCompte_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Client client = cboCompte.SelectedItem as Client;
+            var client = cboCompte.SelectedItem as Client;
             //dtgAfficher.DataContext = client.Compte_Bancaire.ToList();
-            dtgAfficher.DataContext = (from c in mybdd.Compte_Bancaire
+            dtgAfficher.DataContext = (from c in _mybdd.Compte_Bancaire
                                        where c.CClient == client.Code_Client
                                        select c).ToList();
 
@@ -57,13 +55,13 @@ namespace Bank
 
 
 
-        // bouton pour faire un depot d'argent dans les comptes concernes
+        // bouton pour faire un depot d'argent dans les comptes concernés
         private void btnfdepot_Click(object sender, RoutedEventArgs e)
         {
             // Instanciation de l'objet Transaction pour enregistrer les transactions
-            Transaction tr = new Transaction();
+            var tr = new Transaction();
             // connexion entre classe Compte_bancaire et dtgAfficher pour afficher les comptes bancaires
-            Compte_Bancaire _Bancaire = dtgAfficher.SelectedItem as Compte_Bancaire;
+            var _Bancaire = dtgAfficher.SelectedItem as Compte_Bancaire;
             if (txtMontant.Text == string.Empty|| decimal.Parse(txtMontant.Text) < 0)
             {
                 MessageBox.Show("Veuillez saisir un montant");
@@ -75,7 +73,7 @@ namespace Bank
                 {
 
                     // requete pour que le compte selectionner recoive l'argent deposer 
-                    var query = (from c in mybdd.Compte_Bancaire
+                    var query = (from c in _mybdd.Compte_Bancaire
                                  where c.No_Compte == _Bancaire.No_Compte
                                  select c);
                  
@@ -84,26 +82,24 @@ namespace Bank
                     tr.No_Compte = _Bancaire.No_Compte;
                     tr.CCLIENT = _Bancaire.CClient;
      
-                    foreach (Compte_Bancaire c in query)
+                    foreach (var c in query)
                     {
 
                         c.Montant += decimal.Parse(txtMontant.Text);
                      
                     }
 
-                    mybdd.Transactions.Add(tr);
+                    _mybdd.Transactions.Add(tr);
                     try
                     {
-                        mybdd.SaveChanges();
+                        _mybdd.SaveChanges();
                         MessageBox.Show("Transaction effctué avec succes");
 
-                        Client client = cboCompte.SelectedItem as Client;
+                        var client = cboCompte.SelectedItem as Client;
                         //  dtgAfficher.DataContext = client.Compte_Bancaire.ToList();
-                        dtgAfficher.DataContext = (from c in mybdd.Compte_Bancaire
+                        dtgAfficher.DataContext = (from c in _mybdd.Compte_Bancaire
                                                    where c.CClient == client.Code_Client
                                                    select c).ToList();
-
-
                     }
                     catch (Exception ex)
                     {
@@ -124,23 +120,23 @@ namespace Bank
         {
 
             // variable verif qui verifie si le compte selectionner n'est pas le compte Marge de credit 
-            Compte_Bancaire verfif = mybdd.Compte_Bancaire.FirstOrDefault(u => u.Type_de_Compte == "Marge de credit" && u.CClient == _compte);
-            Transaction tr = new Transaction();
-            Compte_Bancaire _Bancaire = dtgAfficher.SelectedItem as Compte_Bancaire;
-            Argent_Comptant ar = new Argent_Comptant();
+            var verfif = _mybdd.Compte_Bancaire.FirstOrDefault(u => u.Type_de_Compte == "Marge de credit" && u.CClient == _compte);
+            var tr = new Transaction();
+            var _Bancaire = dtgAfficher.SelectedItem as Compte_Bancaire;
+            var ar = new Argent_Comptant();
 
             //requete pour selectionner Argent Comptant
-            var query = (from c in mybdd.Argent_Comptant
+            var query = (from c in _mybdd.Argent_Comptant
                          where c.IDComptant == "1"
                          select c);
 
-            var query2 = (from d in mybdd.Compte_Bancaire
+            var query2 = (from d in _mybdd.Compte_Bancaire
                           where d.No_Compte == _Bancaire.No_Compte
                           select d);
 
 
             //requete pour selectionner le compte Marge de credit 
-            var query3 = (from l in mybdd.Compte_Bancaire
+            var query3 = (from l in _mybdd.Compte_Bancaire
                           where l.Type_de_Compte == "Marge de credit"
                           select l);
 
@@ -153,9 +149,9 @@ namespace Bank
             {
                
 
-                foreach (Argent_Comptant c in query)
+                foreach (var c in query)
                 {
-                    decimal? diff2 = c.Comptant - decimal.Parse(txtMontant.Text);
+                    var diff2 = c.Comptant - decimal.Parse(txtMontant.Text);
                     // condition qui verifie si il y a assez d'argent comptant dans la machine  
                     if (diff2<=0  )
                     {
@@ -196,7 +192,7 @@ namespace Bank
 
                                     if (tr.Retrait > _Bancaire.Montant)
                                     {
-                                        decimal? diff = tr.Retrait - _Bancaire.Montant;
+                                        var diff = tr.Retrait - _Bancaire.Montant;
 
                                         // condition qui empeche de faire un retrait du compte Marge de credit
                                         if (verfif == null)
@@ -207,27 +203,21 @@ namespace Bank
                                         {
                                             // fait un retrait du compte Marge de credit la premiere fois que si le retait est plus  eleve que l'argent dans le compte 
                                             MessageBox.Show("Retrait marge de credit");
-                                            foreach (Compte_Bancaire l in query3)
+                                            foreach (var l in query3)
                                             {
-
-
                                                 _Bancaire.Montant = _Bancaire.Montant - tr.Retrait;
                                                 l.Montant += diff;
-
-
 
                                             }
                                             try
                                             {
-                                                mybdd.SaveChanges();
+                                                _mybdd.SaveChanges();
                                                 MessageBox.Show("Transaction effectué avec succes");
                                                 // _Bancaire.Montant -= diff;
-                                                Client client = cboCompte.SelectedItem as Client;
-                                                dtgAfficher.DataContext = (from k in mybdd.Compte_Bancaire
+                                                var client = cboCompte.SelectedItem as Client;
+                                                dtgAfficher.DataContext = (from k in _mybdd.Compte_Bancaire
                                                                            where k.CClient == client.Code_Client
                                                                            select k).ToList();
-
-
 
                                             }
                                             catch (Exception ex)
@@ -237,11 +227,10 @@ namespace Bank
                                             }
                                         }
 
-
                                     }
                                     else
                                     {
-                                        foreach (Argent_Comptant a in query)
+                                        foreach (var a in query)
                                         {
                                             if (a.Comptant < tr.Retrait)                 // Condition qui empeche de faire un retrait plus eleve que le montant disponible dans argent comptant
                                             {
@@ -251,29 +240,27 @@ namespace Bank
                                         }
 
                                         {
-                                            foreach (Argent_Comptant c in query)
+                                            foreach (var c in query)
                                             {
                                                 c.Comptant -= tr.Retrait;                                    // Retrait du montant dans Argent comptant
                                                 
                                             }
-                                            foreach (Compte_Bancaire d in query2)
+                                            foreach (var d in query2)
                                             {        // Retrait du montant dans le compte selectionner
                                                 d.Montant -= tr.Retrait;
                                             }
 
-                                            mybdd.Transactions.Add(tr);
-
+                                            _mybdd.Transactions.Add(tr);
 
                                             try
                                             {
-                                                mybdd.SaveChanges();
+                                                _mybdd.SaveChanges();
                                                 MessageBox.Show("Transaction effctué avec succes");
 
-                                                Client client = cboCompte.SelectedItem as Client;
-                                                dtgAfficher.DataContext = (from k in mybdd.Compte_Bancaire
+                                                var client = cboCompte.SelectedItem as Client;
+                                                dtgAfficher.DataContext = (from k in _mybdd.Compte_Bancaire
                                                                            where k.CClient == client.Code_Client
                                                                            select k).ToList();
-
 
                                             }
                                             catch (Exception ex)
@@ -311,44 +298,28 @@ namespace Bank
         }
 
 
-        //public string un_test(string x)
-        //{
-        //    string le_test = x;
-
-        //    return _compte = le_test;
-        //}
-
-        //Bouton transfert d'argent
-
         private void btnfTrasnfert_Click(object sender, RoutedEventArgs e)
         {
 
-            
-            Transfert transfert = new Transfert();
+            var transfert = new Transfert();
             transfert.Show();
             
-           
-
-            //transfert.cboTransfert.DataContext = (from g in mybdd.Compte_Bancaire
-            //                                      join m in mybdd.Clients on g.CClient equals m.Code_Client
-            //                                      where m.Code_Client == code
-            //                                      select m).ToList();
         }
 
         // bouton pour payer les factures
         private void btnfFacture_Click(object sender, RoutedEventArgs e)
         {
             //connexion entre la classe Compte_Bancaire et le dtgAfficher pour que tout les item selectionner sois synchroniser avec la table
-            Compte_Bancaire _Bancaire = dtgAfficher.SelectedItem as Compte_Bancaire;
+            var _Bancaire = dtgAfficher.SelectedItem as Compte_Bancaire;
             // Instanciation de l'objet Transaction pour enregistrer les transactions
-            Transaction tr = new Transaction();
+            var tr = new Transaction();
 
             // requete pour selectionne le compte cheque
-            var query = (from d in mybdd.Compte_Bancaire
+            var query = (from d in _mybdd.Compte_Bancaire
                          where d.Type_de_Compte == "Cheque" && d.CClient == _compte
                          select d);
             //requete pour selectionne le compte marge de credit 
-            var query3 = (from l in mybdd.Compte_Bancaire
+            var query3 = (from l in _mybdd.Compte_Bancaire
                           where l.Type_de_Compte == "Marge de credit" && l.CClient == _compte
                           select l);
             if (txtMontant.Text == string.Empty||decimal.Parse(txtMontant.Text)<0)
@@ -375,33 +346,27 @@ namespace Bank
                     // condition pour que si le montant qu'il y a dans le compte cheque est plus petit que le montant demander le compte Marge de credit prend la difference  
                     if (tr.Retrait > _Bancaire.Montant)
                     {
-                        decimal? diff = tr.Retrait - _Bancaire.Montant;
+                        var diff = tr.Retrait - _Bancaire.Montant;
                         _Bancaire.Montant -= tr.Retrait;
 
-
                             MessageBox.Show("Retrait marge de credit");
-                            foreach (Compte_Bancaire l in query3)
+                            foreach (var l in query3)
                             {
-
 
                                 _Bancaire.Montant = _Bancaire.Montant - decimal.Parse(txtMontant.Text);
 
                                 l.Montant += diff;
 
-
-
                             }
                             try
                             {
-                                mybdd.SaveChanges();
+                                _mybdd.SaveChanges();
                                 MessageBox.Show("Transaction effectué avec succes");
 
-                                Client client = cboCompte.SelectedItem as Client;
-                                dtgAfficher.DataContext = (from k in mybdd.Compte_Bancaire
+                                var client = cboCompte.SelectedItem as Client;
+                                dtgAfficher.DataContext = (from k in _mybdd.Compte_Bancaire
                                                            where k.CClient == _compte
                                                            select k).ToList();
-
-
 
                             }
                             catch (Exception ex)
@@ -417,7 +382,7 @@ namespace Bank
                     else
                     {
                         //condition qui selectionne le compte cheque concerner et fais la soustraction du montant demande
-                        foreach (Compte_Bancaire c in query)
+                        foreach (var c in query)
                         {
                             c.Montant -= decimal.Parse(txtMontant.Text) + (decimal?)1.25;
 
@@ -425,11 +390,11 @@ namespace Bank
                         }
                         try
                         {
-                            mybdd.SaveChanges();
+                            _mybdd.SaveChanges();
                             MessageBox.Show("Transaction effctué avec succes");
 
-                            Client client = cboCompte.SelectedItem as Client;
-                            dtgAfficher.DataContext = (from h in mybdd.Compte_Bancaire
+                            var client = cboCompte.SelectedItem as Client;
+                            dtgAfficher.DataContext = (from h in _mybdd.Compte_Bancaire
                                                        where h.CClient == _compte
                                                        select h).ToList();
 
@@ -449,7 +414,7 @@ namespace Bank
         // bouton pour revenir a la page de connexion
         private void btnQuitter_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow();
+            var mainWindow = new MainWindow();
             mainWindow.Visibility = Visibility.Visible;
             Application.Current.Properties.Remove("code");
             this.Close();

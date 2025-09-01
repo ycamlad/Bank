@@ -32,7 +32,7 @@ namespace Bank
 
         private void cboHypotheque_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Compte_Bancaire _Bancaire = cboHypotheque.SelectedItem as Compte_Bancaire;
+            var _Bancaire = cboHypotheque.SelectedItem as Compte_Bancaire;
             dtgHypotheque.DataContext = (from c in mybdd.Compte_Bancaire
                                          where c.Type_de_Compte == "Hypotheque" 
                                          select c).ToList();
@@ -40,14 +40,12 @@ namespace Bank
             dtgMarge.DataContext = (from c in mybdd.Compte_Bancaire
                                     where c.Type_de_Compte == "Marge de credit" 
                                     select c).ToList();
-
         }
 
         private void btnPrelever_Click(object sender, RoutedEventArgs e)
         {
-           
-            Compte_Bancaire Bancaire = dtgHypotheque.SelectedItem as Compte_Bancaire;
-            Compte_Bancaire verfif = mybdd.Compte_Bancaire.FirstOrDefault(u => u.Type_de_Compte == "Marge de credit" && u.CClient==Bancaire.CClient);
+            var Bancaire = dtgHypotheque.SelectedItem as Compte_Bancaire;
+            var verfif = mybdd.Compte_Bancaire.FirstOrDefault(u => u.Type_de_Compte == "Marge de credit" && u.CClient==Bancaire.CClient);
             var query = from c in mybdd.Compte_Bancaire
                         where c.Type_de_Compte == "Marge de credit" && c.CClient==Bancaire.CClient
                         select c;
@@ -58,7 +56,6 @@ namespace Bank
             }
             else
             {
-
                 if (decimal.Parse(txtMontant.Text) > Bancaire.Montant)
                 {
                     if (verfif == null)
@@ -67,8 +64,8 @@ namespace Bank
                     }
                     else
                     {
-                        decimal? diff = decimal.Parse(txtMontant.Text) - Bancaire.Montant;
-                        foreach (Compte_Bancaire c in query)
+                        var diff = decimal.Parse(txtMontant.Text) - Bancaire.Montant;
+                        foreach (var c in query)
                         {
                             Bancaire.Montant = Bancaire.Montant - decimal.Parse(txtMontant.Text);
                             c.Montant += diff;
@@ -77,22 +74,19 @@ namespace Bank
                         {
                             mybdd.SaveChanges();
                             MessageBox.Show("Transaction effctuer avec succes");
-                            Compte_Bancaire _Bancaire = cboHypotheque.SelectedItem as Compte_Bancaire;
+                            var _Bancaire = cboHypotheque.SelectedItem as Compte_Bancaire;
                             dtgHypotheque.DataContext = (from c in mybdd.Compte_Bancaire
                                                          where c.Type_de_Compte == "Hypotheque"
                                                          select c).ToList();
                             dtgMarge.DataContext = (from c in mybdd.Compte_Bancaire
                                                     where c.Type_de_Compte == "Marge de credit"
                                                     select c).ToList();
-
                         }
                         catch (Exception ex)
                         {
-
                             MessageBox.Show(ex.Message);
                         }
                     }
-
                 }
                 else
                 {
@@ -101,7 +95,7 @@ namespace Bank
                     {
                         mybdd.SaveChanges();
                         MessageBox.Show("Transaction effctuer avec succes");
-                        Compte_Bancaire _Bancaire = cboHypotheque.SelectedItem as Compte_Bancaire;
+                        var _Bancaire = cboHypotheque.SelectedItem as Compte_Bancaire;
                         dtgHypotheque.DataContext = (from c in mybdd.Compte_Bancaire
                                                      where c.Type_de_Compte == "Hypotheque" 
                                                      select c).ToList();
@@ -109,11 +103,9 @@ namespace Bank
                         dtgMarge.DataContext = (from c in mybdd.Compte_Bancaire
                                                 where c.Type_de_Compte == "Marge de credit"
                                                 select c).ToList();
-
                     }
                     catch (Exception ex)
                     {
-
                         MessageBox.Show(ex.Message);
                     }
                 }

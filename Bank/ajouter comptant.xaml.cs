@@ -31,24 +31,16 @@ namespace Bank
         private void btnAjouter_Click(object sender, RoutedEventArgs e)
         {
 
-            // Argent_Comptant test2 = mybdd.Argent_Comptant.FirstOrDefault(u => u.Comptant == 20000);
-
-            Argent_Comptant argent = new Argent_Comptant();
+            var argent = new Argent_Comptant();
             var query = (from c in mybdd.Argent_Comptant
                          select c);
-
 
             if (txtComptant.Text == string.Empty||decimal.Parse(txtComptant.Text)<=0)
             { MessageBox.Show("Veuillez saisir un montant"); }
             else { 
-                foreach (Argent_Comptant c in query)
+                foreach (var c in query)
                 {
-                    
                     _Montant = c.Comptant;
-                    
-                        
-                    
-
                 }
 
                 if (_Montant == 20000)
@@ -57,45 +49,31 @@ namespace Bank
                 }
                 else
                 {
-
-                    decimal? limite = _Montant + decimal.Parse(txtComptant.Text);
+                    var limite = _Montant + decimal.Parse(txtComptant.Text);
                     //condition qui empeche de mettre plus de 20 000$ dans la machine
                     if (limite > 20000)
                     {
-
                         MessageBox.Show("Veuillez ajuster le montant");
-
                     }
-
-
 
                     else
                     {
-
-
-                        foreach (Argent_Comptant c in query)
+                        foreach (var c in query)
                         {
 
-
-
                             c.Comptant += decimal.Parse(txtComptant.Text);
-
-
                         }
 
 
                         try
                         {
-
                             mybdd.SaveChanges();
                             lblComptant.DataContext = mybdd.Argent_Comptant.ToList();
                             MessageBox.Show("Montant ajouter avec succes");
                         }
                         catch (Exception ex)
                         {
-
                             MessageBox.Show(ex.Message);
-
                         }
                     }
 

@@ -36,21 +36,21 @@ namespace Bank
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            Admin admin = new Admin();
-            Client client = new Client();
-            string code = txtCodeClient.Text;
-            string nip = txtNip.Password;
+            var admin = new Admin();
+            var client = new Client();
+            var code = txtCodeClient.Text;
+            var nip = txtNip.Password;
             Application.Current.Properties["code"] = code;
             // requete pour savoir si le compte est debloquer 
-            Admin verif = mybdd.Admins.FirstOrDefault(u => u.ID_Admin == code && u.Pass_Admin == nip);
-            Client Verification = mybdd.Clients.FirstOrDefault(u => u.Code_Client == code && u.Nip == nip && u.Acces == "Debloquer");
-            Client Verification2 = mybdd.Clients.FirstOrDefault(u => u.Code_Client == code);
+            var verif = mybdd.Admins.FirstOrDefault(u => u.ID_Admin == code && u.Pass_Admin == nip);
+            var Verification = mybdd.Clients.FirstOrDefault(u => u.Code_Client == code && u.Nip == nip && u.Acces == "Debloquer");
+            var Verification2 = mybdd.Clients.FirstOrDefault(u => u.Code_Client == code);
 
             // requete pour savoir si le compte qui se connecte est bloquer 
-            Client Verification3 = mybdd.Clients.FirstOrDefault(u => u.Code_Client == code && u.Acces == "Bloquer");
+            var Verification3 = mybdd.Clients.FirstOrDefault(u => u.Code_Client == code && u.Acces == "Bloquer");
            
                 
-                if (verif!=null)
+            if (verif!=null)
             {
                 counter = 3;
              
@@ -62,17 +62,17 @@ namespace Bank
 
             }
                 //condition qui empeche un utilisateur bloquer de pouvoir acceder a son compte
-          else  if (Verification3 != null) {
+            else  if (Verification3 != null) {
                 txtCodeClient.Text = string.Empty;
                 txtNip.Password = string.Empty;
                 MessageBox.Show("veuillez contacter un representant");
             }
 
-            //
-            else if (counter == 0 && Verification3 != null)
-            {
-                MessageBox.Show("veuillez contacter un representant");
-            }
+            //else if (counter == 0 && Verification3 != null)
+            //{
+            //    MessageBox.Show("veuillez contacter un representant");
+            //}
+
             else
             {
                 // probleme avec le compteur essayer de reparer !!!!!!!!!
@@ -88,32 +88,15 @@ namespace Bank
                 {
                     counter = 3;
                     
-                   
-
-                    Transfert transfert = new Transfert();
-                    Compte compte = new Compte();
+                    //var transfert = new Transfert();
+                    var compte = new Compte();
                     compte.ShowDialog();
                     Hide();
-
-
-                    //compte.cboCompte.DataContext = (from g in mybdd.Compte_Bancaire
-                    //                                join m in mybdd.Clients on g.CClient equals m.Code_Client
-                    //                                where m.Code_Client == code
-                    //                                select m).ToList();
-
-                    //compte.dtgAfficher.DataContext = (from g in mybdd.Compte_Bancaire
-                    //                                  join m in mybdd.Clients on g.CClient equals m.Code_Client
-                    //                                  where m.Code_Client == code
-                    //                                  select m).ToList();
-
-                  //  compte.un_test(code);
-
                 }
                 
                 //condition qui bloque un utilisateur s'il rentre trois fois le mauvais mots de passe 
                 else if (txtCodeClient.Text != string.Empty || txtNip.Password != string.Empty)
                 {
-                    
                     MessageBox.Show("il vous reste: " + counter.ToString() + " essaie(s)");
                    
                     counter--;
@@ -123,43 +106,33 @@ namespace Bank
 
                     if (counter == 0)
                     {
-
-
                         var query = (from c in mybdd.Clients
                                      where c.Code_Client == code
                                      select c);
-                        foreach (Client c in query)
+                        foreach (var c in query)
                         {
 
                             c.Acces = "Bloquer";
                         }
 
-
                         try
                         {
-
                             mybdd.SaveChanges();
 
-                            MessageBox.Show("Votre Compte a ete suspendue veuiller contacter un representant");
-
+                            MessageBox.Show("Votre Compte a ete suspendue veuillez contacter un représentant");
                         }
 
                         catch (Exception ex)
                         {
                             MessageBox.Show(ex.Message);
-
                         }
                     }
                 }
 
                 else if (txtCodeClient.Text == string.Empty || txtNip.Password == string.Empty)
                 {
-
                     MessageBox.Show("Veuillez rentrer votre Code et votre Nip ");
                 }
-
-
-
             }
         }
     }   }

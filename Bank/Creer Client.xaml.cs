@@ -27,46 +27,40 @@ namespace Bank
 
         }
 
-
         private void btnSauvegarder_Click(object sender, RoutedEventArgs e)
         {
 
 
             if (txtCodeClient.Text == string.Empty || txtNom.Text == string.Empty || txtPrenom.Text == string.Empty || txtTelephone.Text == string.Empty || txtCourriel.Text == string.Empty || txtNip.Text == string.Empty)
             {
-
                 MessageBox.Show("Remplir tous les champs, Merci");
-
             }
             else
             {
-
-                Client client = new Client();
-                client.Code_Client = txtCodeClient.Text;
-                client.Nom = txtNom.Text;
-                client.Prenom = txtPrenom.Text;
-                client.Telephone = txtTelephone.Text;
-                client.Courriel = txtCourriel.Text;
-                client.Nip = txtNip.Text;
-                client.Acces = "debloquer";
+                var client = new Client
+                {
+                    Code_Client = txtCodeClient.Text,
+                    Nom = txtNom.Text,
+                    Prenom = txtPrenom.Text,
+                    Telephone = txtTelephone.Text,
+                    Courriel = txtCourriel.Text,
+                    Nip = txtNip.Text,
+                    Acces = "debloquer"
+                };
                 mybdd.Clients.Add(client);
+
                 try
                 {
-
                     mybdd.SaveChanges();
-
 
                     lstAfficher.ItemsSource = mybdd.Clients.ToList();
 
-                    MessageBox.Show("succes!");
-
+                    MessageBox.Show("succès!");
                 }
 
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-
-
                 }
             }
 

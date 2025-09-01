@@ -26,7 +26,6 @@ namespace Bank
             dtgInteret.DataContext = (from c in mybdd.Compte_Bancaire
                                       where c.Type_de_Compte == "Epargne"
                                       select c).ToList();
-           
         }
 
         private void btnPayer_Click(object sender, RoutedEventArgs e)
@@ -35,15 +34,12 @@ namespace Bank
                          where c.Type_de_Compte == "Epargne"
                          select c;
 
-            foreach(Compte_Bancaire c in query)
+            foreach(var c in query)
             {
-
                 c.Montant += c.Montant * (decimal?)0.01;
-
             }
             try
             {
-
                 mybdd.SaveChanges();
                 MessageBox.Show("Transaction effuctuer avec succes");
                 dtgInteret.DataContext = (from c in mybdd.Compte_Bancaire
@@ -51,7 +47,6 @@ namespace Bank
                                           select c).ToList();
             }
             catch (Exception ex) {
-
                 MessageBox.Show(ex.Message);
             }
         }

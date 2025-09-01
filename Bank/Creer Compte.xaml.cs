@@ -32,30 +32,25 @@ namespace Bank
                                            Code = g.CClient,
                                            No_compte = g.No_Compte,
                                            Montant = g.Montant,
-
-
-
                                        }).ToList();
         }
 
         private void btnCreer_Click(object sender, RoutedEventArgs e)
         {
-            Compte_Bancaire test2 = mybdd.Compte_Bancaire.FirstOrDefault(u => u.Type_de_Compte == "Marge de credit"&&u.CClient==txtCode.Text );
+            var test2 = mybdd.Compte_Bancaire.FirstOrDefault(u => u.Type_de_Compte == "Marge de credit"&&u.CClient==txtCode.Text );
             
             if (txtnoCompte.Text == string.Empty || txtCode.Text == string.Empty || cboCompte.Text == string.Empty)
             {
-
                 MessageBox.Show("Remplir tous les champs, merci");
             }
 
             else if (test2!=null)
             {
                 MessageBox.Show("Le client a deja un Compte Marge de credit");
-
             }
             else
             {
-                Compte_Bancaire compte = new Compte_Bancaire();
+                var compte = new Compte_Bancaire();
                 compte.CClient = txtCode.Text;
                 compte.No_Compte = txtnoCompte.Text;
                 compte.Type_de_Compte = cboCompte.Text;
@@ -63,9 +58,7 @@ namespace Bank
                 mybdd.Compte_Bancaire.Add(compte);
                 try
                 {
-
                     mybdd.SaveChanges();
-
 
                     dtgafficher.ItemsSource = (from g in mybdd.Compte_Bancaire
                                                join m in mybdd.Clients on g.CClient equals m.Code_Client
@@ -76,9 +69,6 @@ namespace Bank
                                                    type = g.Type_de_Compte,
                                                    No_compte = g.No_Compte,
                                                    Montant = g.Montant,
-
-
-
                                                }).ToList();
 
                     MessageBox.Show("succes!");
@@ -88,8 +78,6 @@ namespace Bank
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-
-
                 }
             }
         }

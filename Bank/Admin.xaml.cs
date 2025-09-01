@@ -27,13 +27,13 @@ namespace Bank
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Creer_Client creer_Client = new Creer_Client();
+            var creer_Client = new Creer_Client();
             creer_Client.ShowDialog();
         }
 
         private void btnCreerCompte_Click(object sender, RoutedEventArgs e)
         {
-            Creer_Compte creer_ = new Creer_Compte();
+            var creer_ = new Creer_Compte();
             creer_.ShowDialog();
         }
 
@@ -44,34 +44,32 @@ namespace Bank
 
         private void btnAjouterComptant_Click(object sender, RoutedEventArgs e)
         {
-
-            ajouter_comptant ajouter_Comptant = new ajouter_comptant();
+            var ajouter_Comptant = new ajouter_comptant();
 
             ajouter_Comptant.ShowDialog(); ;
-          
         }
 
         private void btnAfficherCompte_Click(object sender, RoutedEventArgs e)
         {
-           Afficher_Compte afficher_Compte = new Afficher_Compte();
+           var afficher_Compte = new Afficher_Compte();
              afficher_Compte.ShowDialog();                       
         }
 
         private void btnAcces_Click(object sender, RoutedEventArgs e)
         {
-            Acces acces = new Acces();
+            var acces = new Acces();
             acces.ShowDialog();
         }
 
         private void btnPayerInteret_Click(object sender, RoutedEventArgs e)
         {
-            Interet interet = new Interet();
+            var interet = new Interet();
             interet.ShowDialog();
         }
 
         private void btnPrelevement_Click(object sender, RoutedEventArgs e)
         {
-            Hypotheque hypotheque = new Hypotheque();
+            var hypotheque = new Hypotheque();
             hypotheque.ShowDialog();
         }
 
@@ -81,7 +79,7 @@ namespace Bank
                         where c.Type_de_Compte == "Marge de credit"
                         select c;
 
-            foreach (Compte_Bancaire c in query)
+            foreach (var c in query)
             {
                 if (c.Montant < 0)
                 {
@@ -95,22 +93,21 @@ namespace Bank
             }
             try
             {
-
                 mybdd.SaveChanges();
-                MessageBox.Show("Augmenter avec succes");
-              
+                MessageBox.Show("Augmenter avec succès");
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.Message);
             }
         }
 
         private void btnQuitter_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Visibility = Visibility.Visible;
+            var mainWindow = new MainWindow
+            {
+                Visibility = Visibility.Visible
+            };
             Application.Current.Properties.Remove("code");
             this.Close();
         }

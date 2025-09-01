@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using JetBrains.Annotations;
 
 namespace Bank
 {
@@ -19,15 +20,15 @@ namespace Bank
     /// </summary>
     public partial class Transfert : Window
     {
-        BankEntities2 mybdd = new BankEntities2();
+        [UsedImplicitly] BankEntities2 _myBankEntities2 = new BankEntities2();
         
         public Transfert()
         {
             InitializeComponent();
-            string code = Application.Current.Properties["code"].ToString();
+            var code = Application.Current.Properties["code"].ToString();
 
-            cboTransfert.DataContext = (from g in mybdd.Compte_Bancaire
-                                        join m in mybdd.Clients on g.CClient equals m.Code_Client
+            cboTransfert.DataContext = (from g in _myBankEntities2.Compte_Bancaire
+                                        join m in _myBankEntities2.Clients on g.CClient equals m.Code_Client
                                         where m.Code_Client == code
                                         select m).ToList();
 
@@ -43,11 +44,11 @@ namespace Bank
 
         private void cboTransfert_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Client client = cboTransfert.SelectedItem as Client;
-            dtgCheque.DataContext = (from a in mybdd.Compte_Bancaire
+            var client = cboTransfert.SelectedItem as Client;
+            dtgCheque.DataContext = (from a in _myBankEntities2.Compte_Bancaire
                                      where a.CClient == client.Code_Client && a.Type_de_Compte == "Cheque"
                                      select a).ToList();
-             dtgComptes.DataContext = (from a in mybdd.Compte_Bancaire
+             dtgComptes.DataContext = (from a in _myBankEntities2.Compte_Bancaire
                                        where a.CClient == client.Code_Client && a.Type_de_Compte != "Cheque"
                                        select a).ToList();
         }
@@ -57,43 +58,43 @@ namespace Bank
         {
             if (txtTransfert.Text == string.Empty|| decimal.Parse(txtTransfert.Text) < 0)
             {
-                MessageBox.Show("Veuiller saisir un montant");
+                MessageBox.Show("Veuillez saisir un montant");
             }
             else
             {
-                Compte_Bancaire _cheque = dtgCheque.SelectedItem as Compte_Bancaire;
-            Compte_Bancaire _compte = dtgComptes.SelectedItem as Compte_Bancaire;
-            Transaction tr = new Transaction();
+                var cheque = dtgCheque.SelectedItem as Compte_Bancaire;
+            var compte = dtgComptes.SelectedItem as Compte_Bancaire;
+            var tr = new Transaction();
             decimal? transfert = decimal.Parse(txtTransfert.Text);
 
-                decimal? diff = _cheque.Montant - transfert;
+                var diff = cheque.Montant - transfert;
 
-                if (diff < 0 && _compte.Type_de_Compte == "Marge de credit")
+                if (diff < 0 && compte != null && compte.Type_de_Compte == "Marge de credit")
                 {
                     MessageBox.Show("Transaction refusée");
                 }
 
-                else if (_compte.Type_de_Compte == "Marge de credit")
+                else if (compte.Type_de_Compte == "Marge de credit")
                 {
 
                     tr.Depot = transfert;
-                    tr.No_Compte = _compte.No_Compte;
-                    tr.CCLIENT = _compte.CClient;
-                    _cheque.Montant -= transfert;
-                    _compte.Montant -= transfert;
+                    tr.No_Compte = compte.No_Compte;
+                    tr.CCLIENT = compte.CClient;
+                    cheque.Montant -= transfert;
+                    compte.Montant -= transfert;
 
-                    mybdd.Transactions.Add(tr);
+                    _myBankEntities2.Transactions.Add(tr);
                     try
                     {
-                        mybdd.SaveChanges();
-                        MessageBox.Show("Transaction effctué avec succes");
+                        _myBankEntities2.SaveChanges();
+                        MessageBox.Show("Transaction effectué avec succès");
 
-                        Client client = cboTransfert.SelectedItem as Client;
-                        dtgCheque.DataContext = (from a in mybdd.Compte_Bancaire
+                        var client = cboTransfert.SelectedItem as Client;
+                        dtgCheque.DataContext = (from a in _myBankEntities2.Compte_Bancaire
                                                  where a.CClient == client.Code_Client && a.Type_de_Compte == "Cheque"
                                                  select a).ToList();
 
-                        dtgComptes.DataContext = (from a in mybdd.Compte_Bancaire
+                        dtgComptes.DataContext = (from a in _myBankEntities2.Compte_Bancaire
                                                   where a.CClient == client.Code_Client && a.Type_de_Compte != "Cheque"
                                                   select a).ToList();
 
@@ -114,31 +115,31 @@ namespace Bank
                     else
                     {
                         tr.Depot = transfert;
-                        tr.No_Compte = _compte.No_Compte;
-                        tr.CCLIENT = _compte.CClient;
-                        _cheque.Montant -= transfert;
-                        _compte.Montant += transfert;
+                        tr.No_Compte = compte.No_Compte;
+                        tr.CCLIENT = compte.CClient;
+                        cheque.Montant -= transfert;
+                        compte.Montant += transfert;
 
-                        if (_cheque.Montant < transfert)
+                        if (cheque.Montant < transfert)
                         {
                             MessageBox.Show("Fond insuffisant");
 
                         }
                         else
                         {
-                            mybdd.Transactions.Add(tr);
+                            _myBankEntities2.Transactions.Add(tr);
 
                             try
                             {
-                                mybdd.SaveChanges();
-                                MessageBox.Show("Transaction effctué avec succes");
+                                _myBankEntities2.SaveChanges();
+                                MessageBox.Show("Transaction effectué avec succès");
 
-                                Client client = cboTransfert.SelectedItem as Client;
-                                dtgCheque.DataContext = (from a in mybdd.Compte_Bancaire
+                                var client = cboTransfert.SelectedItem as Client;
+                                dtgCheque.DataContext = (from a in _myBankEntities2.Compte_Bancaire
                                                          where a.CClient == client.Code_Client && a.Type_de_Compte == "Cheque"
                                                          select a).ToList();
 
-                                dtgComptes.DataContext = (from a in mybdd.Compte_Bancaire
+                                dtgComptes.DataContext = (from a in _myBankEntities2.Compte_Bancaire
                                                           where a.CClient == client.Code_Client && a.Type_de_Compte != "Cheque"
                                                           select a).ToList();
 
@@ -152,11 +153,11 @@ namespace Bank
                         }
                     }
                 }
-       }    }
+            }    }
 
         private void btnQuitter_Click(object sender, RoutedEventArgs e)
         {
-            Compte compte = new Compte();
+            var compte = new Compte();
             compte.dtgAfficher.Items.Refresh();
             
             this.Close();
