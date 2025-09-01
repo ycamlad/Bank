@@ -31,7 +31,6 @@ namespace Bank
         int counter = 3;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
             var admin = new Admin();
             //var client = new Client();
             var code = txtCodeClient.Text;
@@ -44,13 +43,11 @@ namespace Bank
 
             // requete pour savoir si le compte qui se connecte est bloquer 
             var Verification3 = mybdd.Clients.FirstOrDefault(u => u.Code_Client == code && u.Acces == "Bloquer");
-           
-                
+            
             if (verif!=null)
             {
                 counter = 3;
-             
-
+                
                 admin.Show();
                 Hide();
                 txtCodeClient.Text = string.Empty;
@@ -107,7 +104,6 @@ namespace Bank
                                      select c);
                         foreach (var c in query)
                         {
-
                             c.Acces = "Bloquer";
                         }
 
