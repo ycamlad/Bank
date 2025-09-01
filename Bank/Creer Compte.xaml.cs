@@ -72,7 +72,6 @@ namespace Bank
                                                }).ToList();
 
                     MessageBox.Show("succes!");
-
                 }
 
                 catch (Exception ex)
@@ -81,7 +80,6 @@ namespace Bank
                 }
             }
         }
-
-     }
     }
+}
 

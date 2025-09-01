@@ -29,8 +29,6 @@ namespace Bank
 
         private void btnSauvegarder_Click(object sender, RoutedEventArgs e)
         {
-
-
             if (txtCodeClient.Text == string.Empty || txtNom.Text == string.Empty || txtPrenom.Text == string.Empty || txtTelephone.Text == string.Empty || txtCourriel.Text == string.Empty || txtNip.Text == string.Empty)
             {
                 MessageBox.Show("Remplir tous les champs, Merci");

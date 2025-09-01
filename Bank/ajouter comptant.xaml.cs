@@ -25,13 +25,11 @@ namespace Bank
         {
             InitializeComponent();
             lblComptant.DataContext = mybdd.Argent_Comptant.ToList();
-
         }
 
         private void btnAjouter_Click(object sender, RoutedEventArgs e)
         {
-
-            var argent = new Argent_Comptant();
+            //var argent = new Argent_Comptant();
             var query = (from c in mybdd.Argent_Comptant
                          select c);
 
@@ -60,7 +58,6 @@ namespace Bank
                     {
                         foreach (var c in query)
                         {
-
                             c.Comptant += decimal.Parse(txtComptant.Text);
                         }
 
@@ -69,24 +66,17 @@ namespace Bank
                         {
                             mybdd.SaveChanges();
                             lblComptant.DataContext = mybdd.Argent_Comptant.ToList();
-                            MessageBox.Show("Montant ajouter avec succes");
+                            MessageBox.Show("Montant ajouter avec succès");
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show(ex.Message);
                         }
                     }
-
-
-
-
-
-
                 }
             }
 
         }
-
-        }
-    } 
+    }
+} 
 

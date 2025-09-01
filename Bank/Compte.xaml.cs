@@ -53,8 +53,6 @@ namespace Bank
 
         }
 
-
-
         // bouton pour faire un depot d'argent dans les comptes concernés
         private void btnfdepot_Click(object sender, RoutedEventArgs e)
         {
@@ -103,14 +101,12 @@ namespace Bank
                     }
                     catch (Exception ex)
                     {
-
                         MessageBox.Show(ex.Message);
                     }
                 }
                 else
                 {
                     MessageBox.Show("Transaction Refusé", "Erreur", button: MessageBoxButton.OK);
-
                 }
             }
         }
@@ -147,8 +143,6 @@ namespace Bank
             }
             else
             {
-               
-
                 foreach (var c in query)
                 {
                     var diff2 = c.Comptant - decimal.Parse(txtMontant.Text);
@@ -157,7 +151,6 @@ namespace Bank
                     {
                         MessageBox.Show(" Argent comptant insuffisant ","Erreur");
                     }
-
                     comptant = diff2;
                 }
                 // condition qui empeche de prendre de l'argent comptant si la quantite  est plus petite que la difference entre argent comptant et la quantiter demander 
@@ -166,9 +159,7 @@ namespace Bank
                     // condition pour empecher de faire un retrait de  plus de 1000$
                     if (int.Parse(txtMontant.Text) > 1000)
                     {
-
                         MessageBox.Show("Auncun Retrait ne peux exceder 1000$");
-
                     }
                     else
                     {
@@ -185,7 +176,6 @@ namespace Bank
                                 }
                                 else
                                 {
-
                                     tr.CCLIENT = _Bancaire.CClient;
                                     tr.Retrait = decimal.Parse(txtMontant.Text);
                                     tr.No_Compte = _Bancaire.No_Compte;
@@ -207,7 +197,6 @@ namespace Bank
                                             {
                                                 _Bancaire.Montant = _Bancaire.Montant - tr.Retrait;
                                                 l.Montant += diff;
-
                                             }
                                             try
                                             {
@@ -218,11 +207,9 @@ namespace Bank
                                                 dtgAfficher.DataContext = (from k in _mybdd.Compte_Bancaire
                                                                            where k.CClient == client.Code_Client
                                                                            select k).ToList();
-
                                             }
                                             catch (Exception ex)
                                             {
-
                                                 MessageBox.Show(ex.Message);
                                             }
                                         }
@@ -236,14 +223,12 @@ namespace Bank
                                             {
                                                 MessageBox.Show("Fond insuffisant", "ERREUR");
                                             }
-
                                         }
 
                                         {
                                             foreach (var c in query)
                                             {
                                                 c.Comptant -= tr.Retrait;                                    // Retrait du montant dans Argent comptant
-                                                
                                             }
                                             foreach (var d in query2)
                                             {        // Retrait du montant dans le compte selectionner
@@ -261,11 +246,9 @@ namespace Bank
                                                 dtgAfficher.DataContext = (from k in _mybdd.Compte_Bancaire
                                                                            where k.CClient == client.Code_Client
                                                                            select k).ToList();
-
                                             }
                                             catch (Exception ex)
                                             {
-
                                                 MessageBox.Show(ex.Message);
                                             }
                                         }
@@ -276,16 +259,13 @@ namespace Bank
                             }
                             else
                             {
-
                                 MessageBox.Show("Transaction Refusé", "Erreur", button: MessageBoxButton.OK);
-
                             }
                         }
 
                         else
                         {
                             MessageBox.Show("Seul des multiples de 10 sont accepte");
-
                         }
 
                     }
@@ -297,13 +277,10 @@ namespace Bank
 
         }
 
-
         private void btnfTrasnfert_Click(object sender, RoutedEventArgs e)
         {
-
             var transfert = new Transfert();
             transfert.Show();
-            
         }
 
         // bouton pour payer les factures
@@ -325,7 +302,6 @@ namespace Bank
             if (txtMontant.Text == string.Empty||decimal.Parse(txtMontant.Text)<0)
             {
                 MessageBox.Show("Veuiller saisir un montant");
-
             }
             else
             {
@@ -337,7 +313,6 @@ namespace Bank
                 }
                 else
                 {
-
                     // remplissage des donnees pour une transaction dans la table transaction
                     tr.CCLIENT = _Bancaire.CClient;
                     tr.Retrait = decimal.Parse(txtMontant.Text);
@@ -352,11 +327,9 @@ namespace Bank
                             MessageBox.Show("Retrait marge de credit");
                             foreach (var l in query3)
                             {
-
                                 _Bancaire.Montant = _Bancaire.Montant - decimal.Parse(txtMontant.Text);
 
                                 l.Montant += diff;
-
                             }
                             try
                             {
@@ -367,15 +340,11 @@ namespace Bank
                                 dtgAfficher.DataContext = (from k in _mybdd.Compte_Bancaire
                                                            where k.CClient == _compte
                                                            select k).ToList();
-
                             }
                             catch (Exception ex)
                             {
-
                                 MessageBox.Show(ex.Message);
                             }
-                       
-
                     }
 
 
@@ -385,8 +354,6 @@ namespace Bank
                         foreach (var c in query)
                         {
                             c.Montant -= decimal.Parse(txtMontant.Text) + (decimal?)1.25;
-
-
                         }
                         try
                         {
@@ -397,12 +364,9 @@ namespace Bank
                             dtgAfficher.DataContext = (from h in _mybdd.Compte_Bancaire
                                                        where h.CClient == _compte
                                                        select h).ToList();
-
-
                         }
                         catch (Exception ex)
                         {
-
                             MessageBox.Show(ex.Message);
                         }
                     }
@@ -422,4 +386,4 @@ namespace Bank
 
         }
     }
-  }
+}
