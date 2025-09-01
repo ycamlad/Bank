@@ -33,7 +33,7 @@ namespace Bank
         {
 
             var admin = new Admin();
-            var client = new Client();
+            //var client = new Client();
             var code = txtCodeClient.Text;
             var nip = txtNip.Password;
             Application.Current.Properties["code"] = code;
